@@ -1508,4 +1508,40 @@ public class dbcon {
 		}
 		return v;
 	}
+	// 수정자 양동빈 , api 데이터 저장 함수
+	public void insertMuchinstatus(String faciliy, String status, String errorNo, String errorMessage, String time) {
+		try {
+			dbconnect();
+			String insertsql = "insert into status_data(facility, status, errorNo, errorMessage, time) values (?,?,?,?,?)";
+			PreparedStatement pstmt3 = con.prepareStatement(insertsql);
+			pstmt3.setString(1, faciliy);
+			pstmt3.setString(2, status);
+			pstmt3.setString(3, errorNo);
+			pstmt3.setString(4, errorMessage);
+			pstmt3.setString(5, time);
+			pstmt3.executeUpdate();
+			
+			pstmt3.close();
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void insertMuchinstatus(String faciliy, String status,String time) {
+		try {
+			dbconnect();
+			String insertsql = "insert into status_data(facility, status, time) values (?,?,?)";
+			PreparedStatement pstmt3 = con.prepareStatement(insertsql);
+			pstmt3.setString(1, faciliy);
+			pstmt3.setString(2, status);
+			pstmt3.setString(3, time);
+			pstmt3.executeUpdate();
+			
+			pstmt3.close();
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
 }
