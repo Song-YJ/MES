@@ -1,3 +1,15 @@
+<!--  
+기계 상태 메세지 API 입니다.
+기능 : HTTP Post 방식으로 body에 JSON 데이터를 받은 뒤 상태 콜백 후 데이터 베이스에 데이터를 입력합니다.
+
+@author : 양동빈 , fost008@gmail.com
+@version 1.0, API 작성 및 테스트 완료
+
+@ param : json(facility,status,errorNo,errorMessage,time)
+@ return : json(result) 상태 값 0 정상, -1 비정상
+@ exception : body에 json 값이 없을 경우
+-->
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
@@ -68,6 +80,7 @@ if(acceseflag){
 		}
 	}else{
 		dbcon db = new dbcon();
+		// DB SQL insert 문.
 		db.insertMuchinstatus(json.get("facility").toString(),json.get("status").toString(),json.get("time").toString());
 		
 		rdata.put("result","0");
@@ -79,13 +92,11 @@ if(acceseflag){
 		out.println(rdata);
 	}else{
 		dbcon db = new dbcon();
+		// DB SQL insert 문.
 		db.insertMuchinstatus(json.get("facility").toString(),json.get("status").toString(),json.get("errorNo").toString(),json.get("errorMessage").toString(),json.get("time").toString());
 		
 		rdata.put("result","0");
 		out.println(rdata);
 	}
 }
-
-
-
 %>
