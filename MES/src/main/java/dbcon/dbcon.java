@@ -1508,4 +1508,52 @@ public class dbcon {
 		}
 		return v;
 	}
+	/**
+	* status_data 테이블에 상태값 insert (기기 상태가 정상이 아닐 경우)
+	* @ author : 양동빈 , fost008@gmail.com
+	* @ param : String faciliy(기기 번호), String status(기기 상태), String errorNo(에러 번호), String errorMessage(에러 로그), String time(상태변화 시간)
+	* @ exception 예외사항 DB커넥트 실패, DB 파라메터가 NULL 일경우
+	*/
+	// 수정자 양동빈 , api 데이터 저장 함수
+	public void insertMuchinstatus(String faciliy, String status, String errorNo, String errorMessage, String time) {
+		try {
+			dbconnect();
+			String insertsql = "insert into status_data(facility, status, errorNo, errorMessage, time) values (?,?,?,?,?)";
+			PreparedStatement pstmt3 = con.prepareStatement(insertsql);
+			pstmt3.setString(1, faciliy);
+			pstmt3.setString(2, status);
+			pstmt3.setString(3, errorNo);
+			pstmt3.setString(4, errorMessage);
+			pstmt3.setString(5, time);
+			pstmt3.executeUpdate();
+			
+			pstmt3.close();
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	* status_data 테이블에 상태값 insert (기기 상태가 정상일 경우)
+	* @ author : 양동빈 , fost008@gmail.com
+	* @ param : String faciliy(기기 번호), String status(기기 상태), String time(상태변화 시간)
+	* @ exception 예외사항 DB커넥트 실패, DB 파라메터가 NULL 일경우
+	*/
+	public void insertMuchinstatus(String faciliy, String status,String time) {
+		try {
+			dbconnect();
+			String insertsql = "insert into status_data(facility, status, time) values (?,?,?)";
+			PreparedStatement pstmt3 = con.prepareStatement(insertsql);
+			pstmt3.setString(1, faciliy);
+			pstmt3.setString(2, status);
+			pstmt3.setString(3, time);
+			pstmt3.executeUpdate();
+			
+			pstmt3.close();
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
 }
