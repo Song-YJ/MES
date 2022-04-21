@@ -8,9 +8,11 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -1509,51 +1511,161 @@ public class dbcon {
 		return v;
 	}
 	/**
-	* status_data 테이블에 상태값 insert (기기 상태가 정상이 아닐 경우)
+	* status_data 테이블에 상태값 slelect  (combobox)
 	* @ author : 양동빈 , fost008@gmail.com
-	* @ param : String faciliy(기기 번호), String status(기기 상태), String errorNo(에러 번호), String errorMessage(에러 로그), String time(상태변화 시간)
+	* @ return : Vector<String> (facility)
 	* @ exception 예외사항 DB커넥트 실패, DB 파라메터가 NULL 일경우
 	*/
-	// 수정자 양동빈 , api 데이터 저장 함수
-	public void insertMuchinstatus(String faciliy, String status, String errorNo, String errorMessage, String time) {
+	public Vector<String> dashboard_combobox() {
+		Vector<String> value = new Vector<String>();
 		try {
-			dbconnect();
-			String insertsql = "insert into status_data(facility, status, errorNo, errorMessage, time) values (?,?,?,?,?)";
-			PreparedStatement pstmt3 = con.prepareStatement(insertsql);
-			pstmt3.setString(1, faciliy);
-			pstmt3.setString(2, status);
-			pstmt3.setString(3, errorNo);
-			pstmt3.setString(4, errorMessage);
-			pstmt3.setString(5, time);
-			pstmt3.executeUpdate();
 			
-			pstmt3.close();
+			dbconnect();
+			String selectsql = "select  facility from status_data GROUP BY facility;";
+			PreparedStatement pstmt = con.prepareStatement(selectsql);
+			
+			ResultSet rs = null;
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				value.add(rs.getString("facility"));
+			}
+			pstmt.close();
 			con.close();
+			return value;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return value;
 	}
 	/**
-	* status_data 테이블에 상태값 insert (기기 상태가 정상일 경우)
+	* status_data 테이블에 상태값 select
 	* @ author : 양동빈 , fost008@gmail.com
-	* @ param : String faciliy(기기 번호), String status(기기 상태), String time(상태변화 시간)
+	* @ return : long[] (String 비정상, String 스탑 ,String 에러,String null)
 	* @ exception 예외사항 DB커넥트 실패, DB 파라메터가 NULL 일경우
 	*/
-	public void insertMuchinstatus(String faciliy, String status,String time) {
+	public long[] chart_A(String target, String date) {
+		long[] value = {0,0,0,0};
+		
 		try {
-			dbconnect();
-			String insertsql = "insert into status_data(facility, status, time) values (?,?,?)";
-			PreparedStatement pstmt3 = con.prepareStatement(insertsql);
-			pstmt3.setString(1, faciliy);
-			pstmt3.setString(2, status);
-			pstmt3.setString(3, time);
-			pstmt3.executeUpdate();
 			
-			pstmt3.close();
+			dbconnect();
+			String selectsql = "SELECT time,`status` FROM status_data WHERE facility = '"+target+"' AND "+"'"+date+" 00:00:00' "+" < time AND time <" +"'"+date+" 24:00:00' "+"ORDER BY time ASC;";
+			System.out.println(selectsql);
+			PreparedStatement pstmt = con.prepareStatement(selectsql);
+			ResultSet rs = null;
+			Timestamp ts = null;
+			Timestamp ts2 = null;
+			boolean firstflag = true;
+			rs = pstmt.executeQuery();
+			int status = -100;
+			while(rs.next()) {
+				if(firstflag) {
+					status=Integer.parseInt(rs.getString("status"));
+					ts2=Timestamp.valueOf(rs.getString("time"));
+					firstflag=false;
+				}else {
+					ts=Timestamp.valueOf(rs.getString("time"));
+					if(status == -1) {
+						System.out.println("status -1");
+						System.out.println("ts"+Long.toString(ts.getTime()));
+						System.out.println("ts"+Long.toString(ts2.getTime()));
+						value[0]=value[0]+(ts.getTime()-ts2.getTime())/1000;
+					}else if(status == 0) {
+						System.out.println("status 0");
+						System.out.println("ts"+Long.toString(ts.getTime()));
+						System.out.println("ts"+Long.toString(ts2.getTime()));
+						value[1]=value[1]+(ts.getTime()-ts2.getTime())/1000;
+					}else if(status == 1) {
+						System.out.println("status 1");
+						System.out.println("ts"+Long.toString(ts.getTime()));
+						System.out.println("ts"+Long.toString(ts2.getTime()));
+						value[2]=value[2]+(ts.getTime()-ts2.getTime())/1000;
+					}
+					ts2=ts;
+					status=Integer.parseInt(rs.getString("status"));
+				}
+
+			}
+			Timestamp tslast = Timestamp.valueOf(date+" 24:00:00");
+			if(status == -1) {
+				value[0]=value[0]+(tslast.getTime()-ts.getTime())/1000;
+			}else if(status == 0) {
+				value[1]=value[1]+(tslast.getTime()-ts.getTime())/1000;
+			}else if(status == 1) {
+				value[2]=value[2]+(tslast.getTime()-ts.getTime())/1000;
+			}
+			
+			
+			value[3]=86000-value[2]-value[1]-value[0];
+			pstmt.close();
 			con.close();
+			System.out.println(Long.toString(value[0]));
+			System.out.println(Long.toString(value[1]));
+			System.out.println(Long.toString(value[2]));
+			return value;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println(value[0]);
+		System.out.println(value[1]);
+		System.out.println(value[2]);
+		return value;
 	}
+	/**
+	* status_data 테이블에 상태값 select
+	* @ author : 양동빈 , fost008@gmail.com
+	* @ return : ArrayList<String> (status,firstdate,enddate)
+	* @ exception 예외사항 DB커넥트 실패, DB 파라메터가 NULL 일경우
+	*/
+	public ArrayList<String> chart_B(String target, String date) {
+		ArrayList<String> value = new ArrayList<String>();
+		
+		try {
+			
+			dbconnect();
+			String selectsql = "SELECT time,`status` FROM status_data WHERE facility = '"+target+"' AND "+"'"+date+" 00:00:00' "+" < time AND time <" +"'"+date+" 24:00:00' "+"ORDER BY time ASC;";
+			System.out.println(selectsql);
+			PreparedStatement pstmt = con.prepareStatement(selectsql);
+			ResultSet rs = null;
+			rs = pstmt.executeQuery();
+			String status = "-100";
+			boolean firstflag = true;
+			String bft = date+" 00:00:00";
+			while(rs.next()) {
+				if(firstflag) {
+					firstflag = false;
+					
+					value.add(status);
+				}else {
+					value.add(status);
+				}
+				
+				value.add(bft);
+				value.add(rs.getString("time"));
+				
+				status =rs.getString("status");
+				bft=rs.getString("time");
+
+			}
+			value.add(status);
+			value.add(bft);
+			value.add(date+" 24:00:00 ");
+			
+			pstmt.close();
+			con.close();
+			
+			for(int i =0;value.size()<i;i += 3) {
+				System.out.println("-------------------------");
+				System.out.println(value.get(i)+" / "+value.get(i+1)+" / "+value.get(i+2));
+			}
+			
+			
+			return value;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return value;
+	}
+
 }
 }
