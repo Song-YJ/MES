@@ -8,19 +8,17 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.sql.Timestamp;
 
 public class dbcon {
 	Connection con = null;
-	String url = "jdbc:mysql://192.168.0.0115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
-	String id = "Usera";
-	String pw = "1234";
+
 	int degree = 1;
 	int inet_id = 1;
 
@@ -1511,10 +1509,58 @@ public class dbcon {
 		return v;
 	}
 	/**
-	* status_data 테이블에 상태값 slelect  (combobox)
+	* status_data 테이블에 상태값 insert (기기 상태가 정상이 아닐 경우)
 	* @ author : 양동빈 , fost008@gmail.com
-	* @ return : Vector<String> (facility)
-	* @ exception 예외사항 DB커넥트 실패, DB 파라메터가 NULL 일경우
+	* @ param : String faciliy(기기 번호), String status(기기 상태), String errorNo(에러 번호), String errorMessage(에러 로그), String time(상태변화 시간)
+	* @ exception :  printStackTrace()
+	* 부가 설명 : Device.jsp API 관련 함수
+	*/
+	public void insertMuchinstatus(String faciliy, String status, String errorNo, String errorMessage, String time) {
+		try {
+			dbconnect();
+			String insertsql = "insert into status_data(facility, status, errorNo, errorMessage, time) values (?,?,?,?,?)";
+			PreparedStatement pstmt3 = con.prepareStatement(insertsql);
+			pstmt3.setString(1, faciliy);
+			pstmt3.setString(2, status);
+			pstmt3.setString(3, errorNo);
+			pstmt3.setString(4, errorMessage);
+			pstmt3.setString(5, time);
+			pstmt3.executeUpdate();
+			
+			pstmt3.close();
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	* status_data 테이블에 상태값 insert (기기 상태가 정상일 경우)
+	* @ author : 양동빈 , fost008@gmail.com
+	* @ param : String faciliy(기기 번호), String status(기기 상태), String time(상태변화 시간)
+	* @ exception :  printStackTrace()
+	* 부가 설명 : Device.jsp API 관련 함수
+	*/
+	public void insertMuchinstatus(String faciliy, String status,String time) {
+		try {
+			dbconnect();
+			String insertsql = "insert into status_data(facility, status, time) values (?,?,?)";
+			PreparedStatement pstmt3 = con.prepareStatement(insertsql);
+			pstmt3.setString(1, faciliy);
+			pstmt3.setString(2, status);
+			pstmt3.setString(3, time);
+			pstmt3.executeUpdate();
+			
+			pstmt3.close();
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	* status_data 테이블에 기기 설비 이름 select  (combobox)
+	* @ author : 양동빈 , fost008@gmail.com
+	* @ return : Vector<String> (facility) 설비 이름
+	* @ exception :  printStackTrace()
 	*/
 	public Vector<String> dashboard_combobox() {
 		Vector<String> value = new Vector<String>();
@@ -1538,16 +1584,16 @@ public class dbcon {
 		return value;
 	}
 	/**
-	* status_data 테이블에 상태값 select
+	* 차트 구현에 필요한 일일 상태 값을 status_data 테이블에서 select 하는 함수
 	* @ author : 양동빈 , fost008@gmail.com
-	* @ return : long[] (String 비정상, String 스탑 ,String 에러,String null)
-	* @ exception 예외사항 DB커넥트 실패, DB 파라메터가 NULL 일경우
+	* @ return : long[] value {비정상,정지,정상,NULL} 순 상태 시간 정보.
+	* @ exception :  printStackTrace()
 	*/
 	public long[] chart_A(String target, String date) {
-		long[] value = {0,0,0,0};
+		long[] value = {0,0,0,0}; // 리턴 값. 상태 배열.
 		
 		try {
-			
+			// 데이터 선언 부
 			dbconnect();
 			String selectsql = "SELECT time,`status` FROM status_data WHERE facility = '"+target+"' AND "+"'"+date+" 00:00:00' "+" < time AND time <" +"'"+date+" 24:00:00' "+"ORDER BY time ASC;";
 			System.out.println(selectsql);
@@ -1558,6 +1604,9 @@ public class dbcon {
 			boolean firstflag = true;
 			rs = pstmt.executeQuery();
 			int status = -100;
+			
+			
+			//데이터 구현 부
 			while(rs.next()) {
 				if(firstflag) {
 					status=Integer.parseInt(rs.getString("status"));
@@ -1566,19 +1615,10 @@ public class dbcon {
 				}else {
 					ts=Timestamp.valueOf(rs.getString("time"));
 					if(status == -1) {
-						System.out.println("status -1");
-						System.out.println("ts"+Long.toString(ts.getTime()));
-						System.out.println("ts"+Long.toString(ts2.getTime()));
 						value[0]=value[0]+(ts.getTime()-ts2.getTime())/1000;
 					}else if(status == 0) {
-						System.out.println("status 0");
-						System.out.println("ts"+Long.toString(ts.getTime()));
-						System.out.println("ts"+Long.toString(ts2.getTime()));
 						value[1]=value[1]+(ts.getTime()-ts2.getTime())/1000;
 					}else if(status == 1) {
-						System.out.println("status 1");
-						System.out.println("ts"+Long.toString(ts.getTime()));
-						System.out.println("ts"+Long.toString(ts2.getTime()));
 						value[2]=value[2]+(ts.getTime()-ts2.getTime())/1000;
 					}
 					ts2=ts;
@@ -1586,6 +1626,8 @@ public class dbcon {
 				}
 
 			}
+			
+			// 데이터 구현 부 마지막 후처리 [24 시 까지의 데이터 측정 위함.]
 			Timestamp tslast = Timestamp.valueOf(date+" 24:00:00");
 			if(status == -1) {
 				value[0]=value[0]+(tslast.getTime()-ts.getTime())/1000;
@@ -1595,27 +1637,21 @@ public class dbcon {
 				value[2]=value[2]+(tslast.getTime()-ts.getTime())/1000;
 			}
 			
-			
+			//NULL 값 생성
 			value[3]=86000-value[2]-value[1]-value[0];
 			pstmt.close();
 			con.close();
-			System.out.println(Long.toString(value[0]));
-			System.out.println(Long.toString(value[1]));
-			System.out.println(Long.toString(value[2]));
 			return value;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println(value[0]);
-		System.out.println(value[1]);
-		System.out.println(value[2]);
 		return value;
 	}
 	/**
 	* status_data 테이블에 상태값 select
 	* @ author : 양동빈 , fost008@gmail.com
 	* @ return : ArrayList<String> (status,firstdate,enddate)
-	* @ exception 예외사항 DB커넥트 실패, DB 파라메터가 NULL 일경우
+	* @ exception : printStackTrace()
 	*/
 	public ArrayList<String> chart_B(String target, String date) {
 		ArrayList<String> value = new ArrayList<String>();
@@ -1624,13 +1660,14 @@ public class dbcon {
 			
 			dbconnect();
 			String selectsql = "SELECT time,`status` FROM status_data WHERE facility = '"+target+"' AND "+"'"+date+" 00:00:00' "+" < time AND time <" +"'"+date+" 24:00:00' "+"ORDER BY time ASC;";
-			System.out.println(selectsql);
 			PreparedStatement pstmt = con.prepareStatement(selectsql);
 			ResultSet rs = null;
 			rs = pstmt.executeQuery();
 			String status = "-100";
 			boolean firstflag = true;
 			String bft = date+" 00:00:00";
+			
+			
 			while(rs.next()) {
 				if(firstflag) {
 					firstflag = false;
@@ -1651,14 +1688,9 @@ public class dbcon {
 			value.add(bft);
 			value.add(date+" 24:00:00 ");
 			
+			
 			pstmt.close();
 			con.close();
-			
-			for(int i =0;value.size()<i;i += 3) {
-				System.out.println("-------------------------");
-				System.out.println(value.get(i)+" / "+value.get(i+1)+" / "+value.get(i+2));
-			}
-			
 			
 			return value;
 		} catch (Exception e) {
@@ -1666,6 +1698,4 @@ public class dbcon {
 		}
 		return value;
 	}
-
-}
 }
