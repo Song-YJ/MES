@@ -5,15 +5,24 @@
 @author : 양동빈 , fost008@gmail.com
 @version 0.7
 work list
+<<<<<<< Updated upstream
 전체 조회시 (완)
 -기계 아이콘 우측은 삼색등 아이콘
 -해당 설비 이미지 클릭시 해당 설비의 일별 레포트 출력 
 
 주별 조회 시 (완)
+=======
+전체 조회시
+-기계 아이콘 우측은 삼색등 아이콘
+-해당 설비 이미지 클릭시 해당 설비의 일별 레포트 출력
+
+주별 조회 시
+>>>>>>> Stashed changes
 -주별 차트는 현재 일자에서 - 7 (월 상관 없음)
 -하단 차트 요일 표현
 -하단 차트 하루 기준 하루의 %
 
+<<<<<<< Updated upstream
 달별 설비 상태 검색 페이지(완)
 -Time은 총 가동시간이고 Ratio는 그 달에서 Run 상태였던 시간 총합이며 날짜는 검색 날짜입니다
 -달별 검색 시 반드시 해당 달의 1일 검색.
@@ -37,6 +46,17 @@ work list
 달별 차트 (완)
 -Time,Ratio,Date 표기하기.
 
+=======
+달별 설비 상태 검색 페이지
+-Time은 총 가동시간이고 Ratio는 그 달에서 Run 상태였던 시간 총합이며 날짜는 검색 날짜입니다
+-달별 검색 시 반드시 해당 달의 1일 검색.
+-달력도 달별 선택 달력을 사용해주었으면 좋겠다.
+-하단 차트 세로축 가동률 하루 기준 %
+
+공통 페이지
+-설비 검색 조건 콤보 박스 고정 식
+-반응 형 웹 필요없음
+>>>>>>> Stashed changes
 -->
 <%@ page import="javax.security.auth.callback.ConfirmationCallback"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -93,6 +113,7 @@ request.setCharacterEncoding("UTF-8");
 	max-width: 380px;
 	margin: 35px auto;
 }
+<<<<<<< Updated upstream
 .name {
   margin-left:50px;
   margin-right:30px;
@@ -184,6 +205,66 @@ request.setCharacterEncoding("UTF-8");
 }
 
 
+=======
+
+.status_y {
+	background: #e6ff2b;
+	background-image: -webkit-linear-gradient(top, #e6ff2b, #fafada);
+	background-image: -moz-linear-gradient(top, #e6ff2b, #fafada);
+	background-image: -ms-linear-gradient(top, #e6ff2b, #fafada);
+	background-image: -o-linear-gradient(top, #e6ff2b, #fafada);
+	background-image: linear-gradient(to bottom, #e6ff2b, #fafada);
+	-webkit-border-radius: 13;
+	-moz-border-radius: 13;
+	border-radius: 13px;
+	border: 0;
+	font-family: Arial;
+	color: #575757;
+	font-size: 20px;
+	text-decoration: none;
+	width: 100%;
+	height: 100%;
+}
+
+.name {
+	background: #29a9ff;
+	background-image: -webkit-linear-gradient(top, #29a9ff, #a6cbe3);
+	background-image: -moz-linear-gradient(top, #29a9ff, #a6cbe3);
+	background-image: -ms-linear-gradient(top, #29a9ff, #a6cbe3);
+	background-image: -o-linear-gradient(top, #29a9ff, #a6cbe3);
+	background-image: linear-gradient(to bottom, #29a9ff, #a6cbe3);
+	-webkit-border-radius: 13;
+	-moz-border-radius: 13;
+	border-radius: 13px;
+	border: 0;
+	font-family: Arial;
+	color: #ffffff;
+	font-size: 20px;
+	text-decoration: none;
+	width: 100%;
+	height: 100%;
+	transition: 0.5s;
+}
+
+.per {
+	background: #2bff44;
+	background-image: -webkit-linear-gradient(top, #2bff44, #ddfcdb);
+	background-image: -moz-linear-gradient(top, #2bff44, #ddfcdb);
+	background-image: -ms-linear-gradient(top, #2bff44, #ddfcdb);
+	background-image: -o-linear-gradient(top, #2bff44, #ddfcdb);
+	background-image: linear-gradient(to bottom, #2bff44, #ddfcdb);
+	-webkit-border-radius: 13;
+	-moz-border-radius: 13;
+	border-radius: 13px;
+	border: 0;
+	font-family: Arial;
+	color: #575757;
+	font-size: 20px;
+	text-decoration: none;
+	width: 100%;
+	height: 100%;
+}
+>>>>>>> Stashed changes
 </style>
 
 <script>
@@ -215,7 +296,11 @@ request.setCharacterEncoding("UTF-8");
 </head>
 
 <body>
+<<<<<<< Updated upstream
 	<div class=title>KMM</div>
+=======
+	<div class=title>DASHBOARD</div>
+>>>>>>> Stashed changes
 	<div class="panel panel-default border searchbox">
 		<div class="panel-body">
 			검색 &nbsp;&nbsp; <select name="mode" class="form-control searchtitle"
@@ -231,7 +316,10 @@ request.setCharacterEncoding("UTF-8");
 				}
 				%>
 			</select>
+<<<<<<< Updated upstream
 			<button class="btn btn-lg btn-primary" id="search">검색</button>
+=======
+>>>>>>> Stashed changes
 			<h5 class="panel-title" style="display: inline-block; float: right">(주)와이제이솔루션</h5>
 
 
@@ -247,7 +335,11 @@ request.setCharacterEncoding("UTF-8");
 				<!-- 검색 모드 설정 (전체,일별,주별,달별) -->
 					<select id="mode" class="form-control searchtitle"
 						style="float: right">
+<<<<<<< Updated upstream
 						<option value="none">All</option>
+=======
+						<option value="none">None</option>
+>>>>>>> Stashed changes
 						<option value="day">Daily</option>
 						<option value="Week">Weekly</option>
 						<option value="Month">Monthly</option>
@@ -264,15 +356,23 @@ request.setCharacterEncoding("UTF-8");
 					<input type="date" id="date"
 						class="form-control searchtitle"
 						value="<%out.print(format.format(now));%>" style="float: right">
+<<<<<<< Updated upstream
 					<!-- 검색 조건 설정 월별 -->
 					<input type="month" id="month"
 						class="form-control searchtitle" style="float: right" >
 						<h5 id="showdate" style="float: right;margin-right:10px;"><h5>
+=======
+>>>>>>> Stashed changes
 				</div>
 
 
 
+<<<<<<< Updated upstream
 				<h5 class="panel-title" style="display: inline-block; "id="title">Report</h5>
+
+=======
+				<h5 class="panel-title" style="display: inline-block;">Report</h5>
+>>>>>>> Stashed changes
 
 
 			</div>
@@ -281,8 +381,13 @@ request.setCharacterEncoding("UTF-8");
 				
 				<!-- 차트 불러오는 도입 부  -->
 					<div id="test"></div>
+<<<<<<< Updated upstream
 
 
+=======
+
+
+>>>>>>> Stashed changes
 				</div>
 			</div>
 		</div>
@@ -291,6 +396,7 @@ request.setCharacterEncoding("UTF-8");
 <script>
 /**************************** 검색 조건 변경 시 차트 표현 트리거 ***************************/
 // 공통적으로 chart_draw 함수를 부르며 해당 함수 내에서 분기
+<<<<<<< Updated upstream
 /* 	// 설비 명 변경 시 [버튼 방식으로 변경]
 	$('#target').change(function() { // 기기 설비 명 변경 시
 		$(this).trigger('chart_draw');
@@ -301,10 +407,19 @@ request.setCharacterEncoding("UTF-8");
 	}); */
 	// 검색 버튼 클릭시
 	$('#search').click(function() {
+=======
+	// 설비 명 변경 시 
+	$('#target').change(function() {
+		$(this).trigger('chart_draw');
+	});
+	// 일자 변경 시
+	$('#date').change(function() {
+>>>>>>> Stashed changes
 		$(this).trigger('chart_draw');
 	});
 	// 모드 변경 시
 	$('#mode').change(function() {
+<<<<<<< Updated upstream
 		if($('#mode').val() == "Month"){
 			$('#month').val(formatDatemonth($('#date').val()));
 			$('#date').hide();
@@ -317,6 +432,9 @@ request.setCharacterEncoding("UTF-8");
 			$('#month').hide();
 		}
 		
+=======
+		$(this).trigger('chart_draw');
+>>>>>>> Stashed changes
 	});
 	// 화면 크기 변동 시 (사용 안함.)
 /* 	$(window).resize(function() {
@@ -330,6 +448,7 @@ request.setCharacterEncoding("UTF-8");
 	 
 	 
 /**************************** 함수 구현 부 ***************************/
+<<<<<<< Updated upstream
  	$(document).ready(function() {
  		if($('#mode').val() != "Month"){
  			
@@ -372,11 +491,30 @@ request.setCharacterEncoding("UTF-8");
 	});
 
 	
+=======
+ 
+ // 공통 분기 함수 
+	$(window).on('chart_draw', function() {
+		if ($('#mode').val() == "none") {
+			$(this).trigger('allchart_draw');
+		} else if ($('#mode').val() == "day") {
+			$(this).trigger('Dailychart_draw');
+		} else if ($('#mode').val() == "Week") {
+			$(this).trigger('weeklychart_draw');
+		} else if ($('#mode').val() == "Month") {
+			$(this).trigger('Monthchart_draw');
+		}
+	});
+	
+
+
+>>>>>>> Stashed changes
 	/*
 	 * allchart_draw : 메인 화면 차트
 	 * Dailychart_draw : 데일리 차트 
 	 * weeklychart_draw : 주간 차트
 	 * Monthchart_draw : 달별 차트
+<<<<<<< Updated upstream
 	 * 공통 div 태그 id = test 에 차트 그리기.
 	 */
 	$(window).on('allchart_draw', function() {
@@ -397,6 +535,27 @@ request.setCharacterEncoding("UTF-8");
 	});
 	$(window).on('Dailychart_draw', function() {
 		$.ajax({
+=======
+	 */
+	$(window).on('allchart_draw', function() {
+		$.ajax({
+			url : "AllChart.jsp",
+			data : {
+				date : $('#date').val()
+			},
+			datatype : "html",
+			type : "POST",
+			success : function(data) {
+				$("#test").html(data);
+			},
+			error : function() {
+				alert('error');
+			}
+		});
+	});
+	$(window).on('Dailychart_draw', function() {
+		$.ajax({
+>>>>>>> Stashed changes
 			url : "DailyChart.jsp",
 			data : {
 				facilityname : $('#target').val(),
@@ -408,7 +567,11 @@ request.setCharacterEncoding("UTF-8");
 				$("#test").html(data);
 			},
 			error : function() {
+<<<<<<< Updated upstream
 				alert('Dailychart_draw  ajax  함수 에러');
+=======
+				alert('error');
+>>>>>>> Stashed changes
 			}
 		});
 		
@@ -426,7 +589,11 @@ request.setCharacterEncoding("UTF-8");
 				$("#test").html(data);
 			},
 			error : function() {
+<<<<<<< Updated upstream
 				alert('weeklychart_draw  ajax 함수 에러');
+=======
+				alert('error');
+>>>>>>> Stashed changes
 			}
 		});
 	});
@@ -443,13 +610,18 @@ request.setCharacterEncoding("UTF-8");
 				$("#test").html(data);
 			},
 			error : function() {
+<<<<<<< Updated upstream
 				alert('Monthchart_draw  ajax 함수 에러');
+=======
+				alert('error');
+>>>>>>> Stashed changes
 			}
 		});
 	});
 	
 	
 	
+<<<<<<< Updated upstream
 /*
  ****************************** 자바 스크립트 함수*****************************
  * 날짜 변환 기능 및 포맷 변환
@@ -477,10 +649,21 @@ request.setCharacterEncoding("UTF-8");
  *@param : 년도, 주차 
  *@return : 그 주차 시작 날짜 (년,월,일)  
  */
+=======
+	// 자바 스크립트 함수 
+	
+	// 년 주 단위 일단 위로 변환
+	// 프로파티 : 년도,주차
+	// 리턴 : 그 주차 시작 날짜(년,월,일)
+>>>>>>> Stashed changes
 	function getDateOfWeek(date) {
 		var val1 = date.toString();
 		var temp1 = val1.split('-');
 		var temp2 = val1.split('W');
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 		var w = temp2[1];// 주차
 		var y = temp1[0];// 년도
 
@@ -490,7 +673,11 @@ request.setCharacterEncoding("UTF-8");
 
 		return date;
 	}
+<<<<<<< Updated upstream
 /* 	//보정값 반환 [현재 사용 안함.]
+=======
+	//보정값 반환
+>>>>>>> Stashed changes
 	// 프로파티 : 년도(문자열)
 	function bozung(y) {
 
@@ -499,6 +686,7 @@ request.setCharacterEncoding("UTF-8");
 		var datevalue = new Date(dummy);// 날짜 값.
 
 		i = (1 + 7 - datevalue.getDay()) % 7;
+<<<<<<< Updated upstream
 		return i;
 	} */
 	
@@ -508,18 +696,29 @@ request.setCharacterEncoding("UTF-8");
 	 *@param : x
 	 *@return : 현재 날짜의 주차 id: Week 에 값 입력 
 	 */
+=======
+		alert("아아아아아ㅏㅇ앙 : " + i);
+		return i;
+	}
+
+	// 현재 날짜의 주차 반환 함수
+>>>>>>> Stashed changes
 	function thisweek() {
 		var years = new Date().getFullYear();
 		var weeks = new Date().getWeek();
 		var date = "" + years + "-W" + weeks;
 		document.getElementById('week').value = date;
 	}
+<<<<<<< Updated upstream
 	
 	/* 주차 계산 프로토타입 함수
 	 *@author : 양동빈 , fost008@gmail.com
 	 *@param : x
 	 *@return : 현재 주차 반환 var형
 	 */
+=======
+	// 주차 계산 프로토타입 함수
+>>>>>>> Stashed changes
 	Date.prototype.getWeek = function() {
 		var onejan = new Date(this.getFullYear(), 0, 1);
 		var today = new Date(this.getFullYear(), this.getMonth(), this
@@ -527,6 +726,7 @@ request.setCharacterEncoding("UTF-8");
 		var dayOfYear = ((today - onejan + 86400000) / 86400000);
 		return Math.ceil(dayOfYear / 7)
 	};
+<<<<<<< Updated upstream
 	 
 	/* 날짜 타입 일 -> 달
 	 *@author : 양동빈 , fost008@gmail.com
@@ -627,6 +827,8 @@ request.setCharacterEncoding("UTF-8");
 		return  (year + '-' + month + '-' + day );
 	}
 
+=======
+>>>>>>> Stashed changes
 </script>
 </html>
 

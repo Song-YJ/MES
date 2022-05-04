@@ -18,7 +18,9 @@ import java.sql.Timestamp;
 
 public class dbcon {
 	Connection con = null;
-
+	String url = "jdbc:mysql://192.168.0.115:3306/mes?" + "useUnicode=true&characterEncoding=utf8";
+	String id = "Usera";
+	String pw = "1234";
 	int degree = 1;
 	int inet_id = 1;
 

@@ -35,9 +35,15 @@ var options = {
                  // data[1] : STOP
                  // data[2] : RUN
                  // data[3] : NULL
+<<<<<<< Updated upstream
                  out.print(Long.toString(data[2])+","+Long.toString(data[1])+","+Long.toString(data[0])); 
                  %>],
         colors:['#92d050', '#ffc000', '#ff0000'],
+=======
+                 out.print(Long.toString(data[2])+","+Long.toString(data[1])+","+Long.toString(data[0])+","+Long.toString(data[3])); 
+                 %>],
+        colors:['#92d050', '#ffc000', '#ff0000','#3399ff'],
+>>>>>>> Stashed changes
         chart: {
         width: 370,
         type: 'pie',
