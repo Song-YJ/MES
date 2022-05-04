@@ -1636,16 +1636,17 @@ public class dbcon {
 		return v;
 	}
 	/**
-	* status_data 테이블에 상태값 insert (기기 상태가 정상이 아닐 경우)
-	* @ author : 양동빈 , fost008@gmail.com
-	* @ param : String faciliy(기기 번호), String status(기기 상태), String errorNo(에러 번호), String errorMessage(에러 로그), String time(상태변화 시간)
-	* @ exception :  printStackTrace()
+	* @fileName  : dbconn.java
+	* @explain : YJS_POP 테이블에 상태값 insert (기기 상태가 정상이 아닐 경우)
+	* @author : 양동빈 , fost008@gmail.com
+	* @param : String faciliy(기기 번호), String status(기기 상태), String errorNo(에러 번호), String errorMessage(에러 로그), String time(상태변화 시간)
+	* @exception :  printStackTrace()
 	* 부가 설명 : Device.jsp API 관련 함수
 	*/
 	public void insertMuchinstatus(String faciliy, String status, String errorNo, String errorMessage, String time) {
 		try {
 			dbconnect();
-			String insertsql = "insert into status_data(facility, status, errorNo, errorMessage, time) values (?,?,?,?,?)";
+			String insertsql = "insert into YJS_POP(facility, status, errorNo, errorMessage, time) values (?,?,?,?,?)";
 			PreparedStatement pstmt3 = con.prepareStatement(insertsql);
 			pstmt3.setString(1, faciliy);
 			pstmt3.setString(2, status);
@@ -1661,16 +1662,17 @@ public class dbcon {
 		}
 	}
 	/**
-	* status_data 테이블에 상태값 insert (기기 상태가 정상일 경우)
-	* @ author : 양동빈 , fost008@gmail.com
-	* @ param : String faciliy(기기 번호), String status(기기 상태), String time(상태변화 시간)
-	* @ exception :  printStackTrace()
+	* @fileName  : dbconn.java
+	* @explain : YJS_POP 테이블에 상태값 insert (기기 상태가 정상일 경우)
+	* @author : 양동빈 , fost008@gmail.com
+	* @param : String faciliy(기기 번호), String status(기기 상태), String time(상태변화 시간)
+	* @exception :  printStackTrace()
 	* 부가 설명 : Device.jsp API 관련 함수
 	*/
 	public void insertMuchinstatus(String faciliy, String status,String time) {
 		try {
 			dbconnect();
-			String insertsql = "insert into status_data(facility, status, time) values (?,?,?)";
+			String insertsql = "insert into YJS_POP(facility, status, time) values (?,?,?)";
 			PreparedStatement pstmt3 = con.prepareStatement(insertsql);
 			pstmt3.setString(1, faciliy);
 			pstmt3.setString(2, status);
@@ -1684,17 +1686,18 @@ public class dbcon {
 		}
 	}
 	/**
-	* status_data 테이블에 기기 설비 이름 select  (combobox)
-	* @ author : 양동빈 , fost008@gmail.com
-	* @ return : Vector<String> (facility) 설비 이름
-	* @ exception :  printStackTrace()
+	* @fileName  : dbconn.java
+	* @explain : YJS_POP 테이블에 기기 설비 이름 select  (combobox)
+	* @author : 양동빈 , fost008@gmail.com
+	* @return : Vector<String> (facility) 설비 이름
+	* @exception :  printStackTrace()
 	*/
 	public Vector<String> dashboard_combobox() {
 		Vector<String> value = new Vector<String>();
 		try {
 			
 			dbconnect();
-			String selectsql = "select  facility from status_data GROUP BY facility;";
+			String selectsql = "select  facility from YJS_POP GROUP BY facility;";
 			PreparedStatement pstmt = con.prepareStatement(selectsql);
 			
 			ResultSet rs = null;
@@ -1711,10 +1714,11 @@ public class dbcon {
 		return value;
 	}
 	/**
-	* 차트 구현에 필요한 일일 상태 값을 status_data 테이블에서 select 하는 함수
-	* @ author : 양동빈 , fost008@gmail.com
-	* @ return : long[] value {비정상,정지,정상,NULL} 순 상태 시간 정보.
-	* @ exception :  printStackTrace()
+	* @fileName  : dbconn.java
+	* @explain : 차트 구현에 필요한 일일 상태 값을 YJS_POP 테이블에서 select 하는 함수
+	* @author : 양동빈 , fost008@gmail.com
+	* @return : long[] value {비정상,정지,정상,NULL} 순 상태 시간 정보.
+	* @exception :  printStackTrace()
 	*/
 	public long[] chart_A(String target, String date) {
 		long[] value = {0,0,0,0}; // 리턴 값. 상태 배열.
@@ -1722,7 +1726,7 @@ public class dbcon {
 		try {
 			// 데이터 선언 부
 			dbconnect();
-			String selectsql = "SELECT time,`status` FROM status_data WHERE facility = '"+target+"' AND "+"'"+date+" 00:00:00' "+" < time AND time <" +"'"+date+" 24:00:00' "+"ORDER BY time ASC;";
+			String selectsql = "SELECT time,`status` FROM YJS_POP WHERE facility = '"+target+"' AND "+"'"+date+" 00:00:00' "+" < time AND time <" +"'"+date+" 24:00:00' "+"ORDER BY time ASC;";
 			System.out.println(selectsql);
 			PreparedStatement pstmt = con.prepareStatement(selectsql);
 			ResultSet rs = null;
@@ -1775,10 +1779,11 @@ public class dbcon {
 		return value;
 	}
 	/**
-	* status_data 테이블에 상태값 select
-	* @ author : 양동빈 , fost008@gmail.com
-	* @ return : ArrayList<String> (status,firstdate,enddate)
-	* @ exception : printStackTrace()
+	* @fileName  : dbconn.java
+	* @explain : YJS_POP 테이블에 상태값 select
+	* @author : 양동빈 , fost008@gmail.com
+	* @return : ArrayList<String> (status,firstdate,enddate)
+	* @exception : printStackTrace()
 	*/
 	public ArrayList<String> chart_B(String target, String date) {
 		ArrayList<String> value = new ArrayList<String>();
@@ -1786,7 +1791,7 @@ public class dbcon {
 		try {
 			
 			dbconnect();
-			String selectsql = "SELECT time,`status` FROM status_data WHERE facility = '"+target+"' AND "+"'"+date+" 00:00:00' "+" < time AND time <" +"'"+date+" 24:00:00' "+"ORDER BY time ASC;";
+			String selectsql = "SELECT time,`status` FROM YJS_POP WHERE facility = '"+target+"' AND "+"'"+date+" 00:00:00' "+" < time AND time <" +"'"+date+" 24:00:00' "+"ORDER BY time ASC;";
 			PreparedStatement pstmt = con.prepareStatement(selectsql);
 			ResultSet rs = null;
 			rs = pstmt.executeQuery();
@@ -1819,6 +1824,102 @@ public class dbcon {
 			pstmt.close();
 			con.close();
 			
+			return value;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return value;
+	}
+	/**
+	* @fileName  : dbconn.java
+	* @explain : YJS_POP 테이블 조회문, 해당 시간의 특정 설비의 가장 최근 상태값을 불러옴
+	* @author : 양동빈 , fost008@gmail.com
+	* @return : String status  (상태값 : -1 에러,0 정지,1 정상)
+	* @exception : printStackTrace()
+	*/
+	public String get_facility_status(String target) {
+		String value = "";
+		
+		try {
+			
+			dbconnect();
+			String selectsql = "SELECT status FROM YJS_POP  where facility = '"+target+"' ORDER BY time DESC LIMIT 1 ;";
+			PreparedStatement pstmt = con.prepareStatement(selectsql);
+			ResultSet rs = null;
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				value = rs.getString("status");
+			}
+			
+			
+			pstmt.close();
+			con.close();
+			
+			return value;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return value;
+	}
+	/**
+	* @fileName  : dbconn.java
+	* @explain :YJS_POP 테이블 조회문, 해당 설비 로그 시작 일자 반환
+	* @author : 양동빈 , fost008@gmail.com
+	* @return : String date (시작 날짜)
+	* @exception : printStackTrace()
+	*/
+	public String get_log_startdate(String target) {
+		String value = "";
+		
+		try {
+			
+			dbconnect();
+			String selectsql = "SELECT time FROM YJS_POP  where facility = '"+target+"' ORDER BY time ASC LIMIT 1 ;";
+			PreparedStatement pstmt = con.prepareStatement(selectsql);
+			ResultSet rs = null;
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				value = rs.getString("time");
+			}
+			pstmt.close();
+			con.close();
+			if(value == null) {
+				value = "-1";// 해당 값 없을 시 
+			}
+			return value;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return value;
+	}
+	/**
+	* @fileName  : dbconn.java
+	* @explain : YJS_POP 테이블 조회문, 해당 설비 로그 마지막 일자 반환
+	* @author : 양동빈 , fost008@gmail.com
+	* @return : String date (마지막 날짜)
+	* @exception : printStackTrace()
+	*/
+	public String get_log_enddate(String target) {
+		String value = "";
+		
+		try {
+			
+			dbconnect();
+			String selectsql = "SELECT time FROM YJS_POP  where facility = '"+target+"' ORDER BY time DESC LIMIT 1 ;";
+			PreparedStatement pstmt = con.prepareStatement(selectsql);
+			ResultSet rs = null;
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				value = rs.getString("time");
+			}
+			pstmt.close();
+			con.close();
+			if(value == null) {
+				value = "-1";// 해당 값 없을 시 
+			}
 			return value;
 		} catch (Exception e) {
 			e.printStackTrace();
