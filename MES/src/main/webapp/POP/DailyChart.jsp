@@ -29,17 +29,25 @@ ArrayList<String> data2 = db2.chart_B(val, date);
 <!--  원형 차트  -->
 <script>
 var options = {
-        series: [<% out.print(Long.toString(data[2])+","+Long.toString(data[1])+","+Long.toString(data[0])+","+Long.toString(data[3])); %>],
-        colors:['#92d050', '#ffc000', '#ff0000','#3399ff'],
+        series: [<% 
+                 // 차트 목록 부분 데이터 구현 부 
+                 // data[0] : ALARM
+                 // data[1] : STOP
+                 // data[2] : RUN
+                 // data[3] : NULL
+                 out.print(Long.toString(data[2])+","+Long.toString(data[1])+","+Long.toString(data[0])); 
+                 %>],
+        colors:['#92d050', '#ffc000', '#ff0000'],
         chart: {
         width: 370,
         type: 'pie',
       },
-      labels: [<% out.print
+      labels: [
+      <% // 원형 차트 그래프 부분 데이터 구현 부
+      		out.print
           ("'RUN "+Long.toString(data[2]/60/60)+"h "+Long.toString(data[2]/60%60)+"m'"+","+
            "'STOP "+Long.toString(data[1]/60/60)+"h "+Long.toString(data[1]/60%60)+"m'"+","+
-           "'ALARM "+Long.toString(data[0]/60/60)+"h "+Long.toString(data[0]/60%60)+"m'"+","+
-           "'NONE "+Long.toString(data[3]/60/60)+"h "+Long.toString(data[3]/60%60)+"m'"
+           "'ALARM "+Long.toString(data[0]/60/60)+"h "+Long.toString(data[0]/60%60)+"m'"
 		  ); %>],
       responsive: [{
         breakpoint: 100,
@@ -58,7 +66,10 @@ var options = {
       chart.render();
 </script>
 
-<div id="chart2"></div>
+
+
+
+<div id="chart2" style ="width:100%;"></div>
 <!--  타임 라인 차트  -->
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
@@ -75,24 +86,35 @@ var options = {
     dataTable.addColumn({ type: 'date', id: 'Start' });
     dataTable.addColumn({ type: 'date', id: 'End' });
     dataTable.addRows([
+    	
       <%
+      // 차트 목록 부분 데이터 구현 부 
+      // data[0] : ALARM
+      // data[1] : STOP
+      // data[2] : RUN
+      // data[3] : NULL
+      // 배열 내부의 스테이터스에 따라 분기  
       for(int i = 0; i<data2.size(); i+=3){
-    	  out.print("[ 'Time', ");
-    	  if(data2.get(i)=="-100"){
-    		  out.print("'NONE' , '#3399ff',");
-    	  }else if(data2.get(i).equals("-1")){
+    	  if(!data2.get(i).equals("-100")){
+    		  out.print("[ 'Time', ");
+    	  }
+    	  
+    	  if(data2.get(i).equals("-1")){
     		  out.print("'ALARM' , '#ff0000',");
     	  }else if(data2.get(i).equals("0")){
     		  out.print("'STOP' , '#ffc000',");
     	  }else if(data2.get(i).equals("1")){
     		  out.print("'RUN' , '#92d050',");
     	  }
-    	  out.print("new Date('"+ data2.get(i+1)+"'), new Date('"+data2.get(i+2)+"') ]");
-    	  if(data2.size()-3 == i){
-    		  out.println("");
-    	  }else{
-    		  out.println(",");
+    	  if(!data2.get(i).equals("-100")){
+    		  out.print("new Date('"+ data2.get(i+1)+"'), new Date('"+data2.get(i+2)+"') ]");
+        	  if(data2.size()-3 == i){
+        		  out.println("");
+        	  }else{
+        		  out.println(",");
+        	  }
     	  }
+    	  
       }
       %>
       ]);
